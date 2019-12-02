@@ -11,45 +11,102 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    CheckBox checkBox1 ;
+    CheckBox checkBox2 ;
+    CheckBox checkBox3 ;
+    CheckBox checkBox4 ;
+     TextView textView ;
+    CheckBox[] checkBoxes ;
+
+    private CheckBox.OnCheckedChangeListener checkedChangeListener = new CheckBox.OnCheckedChangeListener(){
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            int countSelect = 0;
+            for (CheckBox checkBox : checkBoxes){
+                if (checkBox.isChecked()){
+                    countSelect ++;
+                }
+            }
+            switch (countSelect){
+                case 0:
+                    textView.setText("您还没选择物品");
+                    break;
+                case 1:
+                    textView.setText("您还可以继续购物");
+                    break;
+                case 2:
+                    textView.setText("您的预算已达到峰值");
+                    break;
+                case 3:
+                case 4:
+                    textView.setText("已超出您的预算");
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        selectProduct();
+        checkBox1 = findViewById(R.id.checkBox);
+         checkBox2 = findViewById(R.id.checkBox2);
+         checkBox3 = findViewById(R.id.checkBox3);
+         checkBox4 = findViewById(R.id.checkBox4);
+         textView = findViewById(R.id.textView);
+        checkBoxes = new CheckBox[]{checkBox1,checkBox2,checkBox3,checkBox4};
+        checkBox1.setOnCheckedChangeListener(checkedChangeListener);
+        checkBox2.setOnCheckedChangeListener(checkedChangeListener);
+        checkBox3.setOnCheckedChangeListener(checkedChangeListener);
+        checkBox4.setOnCheckedChangeListener(checkedChangeListener);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    private void selectProduct(){
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new Button.OnClickListener(){
+
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                int countSelect = 0;
+                for (CheckBox checkBox : checkBoxes){
+                    if (checkBox.isChecked()){
+                        countSelect ++;
+                    }
+                }
+                switch (countSelect){
+                    case 0:
+                        textView.setText("您还没选择物品");
+                        break;
+                    case 1:
+                        textView.setText("您还可以继续购物");
+                        break;
+                    case 2:
+                        textView.setText("您的预算已达到峰值");
+                        break;
+                    case 3:
+                    case 4:
+                        textView.setText("已超出您的预算");
+                        break;
+                }
             }
         });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
